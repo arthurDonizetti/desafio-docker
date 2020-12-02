@@ -1,0 +1,48 @@
+version: '3'
+
+services: 
+  application:
+    build: 
+      context: ./app
+    container_name: application
+    image: arthurdonizetti/desafio-docker-nginx-app
+    entrypoint: dockerize -wait tcp://mysql:3306 -timeout 20s node index.js
+    networks: 
+      - nginx-network
+    volumes:
+      - ./app:/usr/src/app
+    tty: true
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:5.7
+    command: --innodb-use-native-aio=0
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      - ./data:/var/lib/mysql
+    environment:
+     - MYSQL_DATABASE=nginxdb
+     - MYSQL_ROOT_PASSWORD=root
+     - MYSQL_USER=root
+    networks:
+     - nginx-network
+
+  nginx:
+    build:
+      context: ./nginx
+    image: arthurdonizetti/desafio-docker-nginx
+    # entrypoint: dockerize -wait tcp://application:3000 -timeout 40s
+    container_name: nginx
+    networks:
+      - nginx-network
+    ports:
+      - "8080:80"
+    depends_on: 
+      - application
+
+networks:
+  nginx-network:
+    driver: bridge
