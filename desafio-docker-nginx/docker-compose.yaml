@@ -6,11 +6,11 @@ services:
       context: ./app
     container_name: application
     image: arthurdonizetti/desafio-docker-nginx-app
-    entrypoint: dockerize -wait tcp://mysql:3306 -timeout 20s node index.js
+    entrypoint: dockerize -wait tcp://mysql:3306 -timeout 20s npm start
     networks: 
       - nginx-network
     volumes:
-      - ./app:/usr/src/app
+      - ./app/src:/usr/src/app/src
     tty: true
     depends_on:
       - mysql
