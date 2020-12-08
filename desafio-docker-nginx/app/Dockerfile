@@ -10,7 +10,7 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
   && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 COPY package*.json ./
-RUN npm install -g
-COPY . .
+RUN npm install
+COPY ./src ./src
 
 EXPOSE 3000
