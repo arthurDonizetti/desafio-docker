@@ -2,7 +2,7 @@ version: '3'
 
 services: 
   application:
-    build: 
+    build:
       context: ./app
     container_name: application
     image: arthurdonizetti/desafio-docker-nginx-app
@@ -16,9 +16,11 @@ services:
       - mysql
 
   mysql:
-    image: mysql:5.7
-    command: --innodb-use-native-aio=0
+    build:
+      context: ./mysql
     container_name: db
+    image: arthurdonizetti/desafio-docker-nginx-database
+    command: --innodb-use-native-aio=0
     restart: always
     tty: true
     volumes:
